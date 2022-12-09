@@ -13,7 +13,8 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function home(){
+    public function home()
+    {
         return view('vueApp');
     }
 
@@ -44,14 +45,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title'=>'required|max:255',
-            'body'=>'required']);
+        $this->postValid();
         $post = new Post;
         $post->title = $request->title;
         $post->body = $request->body;
+        $post->author_id = $request->author_id;
         $post->save();
         return response()->json([
+            'status'=>true,
             'success'=> 'New post created Successfully']);
     }
 
@@ -73,7 +74,8 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id){
+    public function edit($id)
+    {
         $post = Post::find($id);
         return $post;
     }
@@ -87,12 +89,10 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-            $request->validate([
-                'title'=>'required|max:255',
-                'body'=>'required']);
-            Post::where('id',$id)->update(['title'=>$request->title, 'body'=>$request->body]);
-            return response()->json([
-                'success'=> 'Updated Successfully']);
+        $this->postValid();
+        Post::where('id',$id)->update(['title'=>$request->title, 'body'=>$request->body,'author_id'=>$request->author_id]);
+        return response()->json([
+            'success'=> 'Updated Successfully']);
             
     }
 
@@ -107,5 +107,12 @@ class PostController extends Controller
         Post::where('id',$id)->delete();
         return response()->json([
                 'success'=> 'Deleted Successfully']);
+    }
+    protected function postValid()
+    {
+        request()->validate([
+            'title'=>'required|max:255',
+            'body'=>'required',
+            'author_id'=>'required']);
     }
 }
