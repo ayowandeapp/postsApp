@@ -15,16 +15,16 @@ class AuthorManagementTest extends TestCase
     /** @test */
     public function createAuthor()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
         $response = $this->post('/author/store',[
             'name'=>'wande',
             'dob'=>'3/5/2000']);
-        $author = Author::latest()->first();
+        $author = Author::first();
         //dd($author);die;
+        // $this->assertCount(1, $author);
         $response->assertOk();
-        //$this->assertCount(1, $author);
-        //$this->assertInstanceOf(Carbon::class, $author->first()->dob);
-        //$this->assertEquals('03/05/2000', $author->first()->dob->format('m/d/Y'));
+        $this->assertInstanceOf(Carbon::class, $author->dob);
+        $this->assertEquals('03/05/2000', $author->dob->format('m/d/Y'));
 
     }
 }

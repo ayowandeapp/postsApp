@@ -51,7 +51,7 @@
                 })
             },
         	editPost(){
-        		Axios.patch('/posts/'+this.$route.params.id, {title:this.post.title, body:this.post.body })
+        		axios.patch('/posts/'+this.$route.params.id+ '/edit', {title:this.post.title, body:this.post.body })
         		.then(response=>{
         			//alert('New service created Successfully');
                 	this.$router.push({name:'listPost'})

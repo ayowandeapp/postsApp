@@ -30,7 +30,7 @@ class PostManagementTest extends TestCase
         
         $response->assertStatus(200);
         $response->assertOk();
-        //$this->assertCount(0,Post::all());
+        $this->assertCount(0,Post::all());
     }
 
     /** @test */
@@ -43,7 +43,7 @@ class PostManagementTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertOk();
-        //$this->assertCount(1,Post::all());
+        $this->assertCount(1,Post::all());
     }
 
     /** @test */
@@ -88,17 +88,17 @@ class PostManagementTest extends TestCase
     }
 
     /** @test */
-    public function addAuthorOnPost()
-    {
-        $response = $this->post('/posts/store',[
-            'title'=>'test',
-            'body'=>'testBody',
-            'author_id'=>9]);
-        $post = Post::first();
-        $author = Author::first();
-        //dd($post->author_id); die;
-        $this->assertEquals($author->id, $post->author_id);
-        //$this->assertCount(1,Author::all());
-    }
+    // public function addAuthorOnPost()
+    // {
+    //     $response = $this->post('/posts/store',[
+    //         'title'=>'test',
+    //         'body'=>'testBody',
+    //         'author_id'=>9]);
+    //     $post = Post::first();
+    //     $author = Author::first();
+    //     //dd($post->author_id); die;
+    //     //$this->assertEquals($author->id, $post->author_id);
+    //     //$this->assertCount(1,Author::all());
+    // }
 
 }

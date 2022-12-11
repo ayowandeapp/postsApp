@@ -48,8 +48,8 @@
                 if(id != undefined){
                   if(confirm("Are you sure you want to delete this?")) {
                     axios.delete('/posts/'+id).then(response =>{
-                //alertify.success('Deleted successfully');
-                this.fetchPosts();
+               	 //alertify.success('Deleted successfully');
+                	this.fetchPosts();
                 })
             }
                 }

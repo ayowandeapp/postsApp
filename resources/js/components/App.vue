@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="container">
         <transition name="fade">
             <router-view>uuuu</router-view>
@@ -13,3 +13,4 @@
         }
     }
 </script>
+ -->
