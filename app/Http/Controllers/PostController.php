@@ -18,13 +18,12 @@ class PostController extends Controller
         return view('vueApp');
     }
 
-
     public function index()
     {
         $posts=  Post::orderby('id', 'DESC')->get();
         $posts = json_decode(json_encode($posts));
         return $posts;
-        #return view('vueApp')->with(compact('posts'));
+        // return view('vueApp')->with(compact('posts'));
     }
 
     /**
@@ -92,8 +91,7 @@ class PostController extends Controller
         $this->postValid();
         Post::where('id',$id)->update(['title'=>$request->title, 'body'=>$request->body,'author_id'=>$request->author_id]);
         return response()->json([
-            'success'=> 'Updated Successfully']);
-            
+            'success'=> 'Updated Successfully']);        
     }
 
     /**
@@ -102,12 +100,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
         Post::where('id',$id)->delete();
         return response()->json([
                 'success'=> 'Deleted Successfully']);
     }
+
     protected function postValid()
     {
         request()->validate([
