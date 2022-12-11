@@ -2652,7 +2652,7 @@ __webpack_require__.r(__webpack_exports__);
     editPost: function editPost() {
       var _this2 = this;
 
-      Axios.patch('/posts/' + this.$route.params.id, {
+      axios.patch('/posts/' + this.$route.params.id + '/edit', {
         title: this.post.title,
         body: this.post.body
       }).then(function (response) {
@@ -56158,7 +56158,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************************************************************!*\
   !*** ./resources/js/components/AddPost.vue?vue&type=template&id=6aebc474& ***!
   \****************************************************************************/
-/*! no static exports found */
+/*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56429,8 +56429,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\wamp64\www\crudvue\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\wamp64\www\crudvue\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\wamp64\www\crudvue6\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\wamp64\www\crudvue6\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
