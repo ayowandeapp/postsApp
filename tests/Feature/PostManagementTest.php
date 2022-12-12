@@ -6,6 +6,8 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Post;
 use App\Author;
+use App\User;
+use Laravel\Sanctum\Sanctum;
 
 class PostManagementTest extends TestCase
 {
@@ -24,6 +26,7 @@ class PostManagementTest extends TestCase
     public function deletePost()
     {
         $this->withoutExceptionHandling();
+        Sanctum::actingAs(factory(User::class)->create());
         $post = factory(Post::class)->create();
         //var_dump($post); die;
         $response = $this->delete('/posts/'.$post->id);
@@ -36,10 +39,11 @@ class PostManagementTest extends TestCase
     /** @test */
     public function createPost()
     {
+        $this->withoutExceptionHandling();
+        Sanctum::actingAs(factory(User::class)->create());
         $response = $this->post('/posts/store',[
             'title'=>'test',
-            'body'=>'testBody',
-            'author_id'=>9]);
+            'body'=>'testBody']);
 
         $response->assertStatus(200);
         $response->assertOk();
@@ -72,11 +76,11 @@ class PostManagementTest extends TestCase
     public function updatePost()
     {
         $post = factory(Post::class)->create();
+        Sanctum::actingAs(factory(User::class)->create());
         //dd($post); die;
         $response = $this->patch('/posts/'.$post->id.'/edit',[
             'title'=> 'new_title',
-            'body'=> 'new_body',
-            'author_id'=>$post->id]);
+            'body'=> 'new_body']);
         
         $get = Post::find($post->id);
         //var_dump($get); die;
@@ -84,7 +88,7 @@ class PostManagementTest extends TestCase
         $response->assertOk();
         $this->assertEquals('new_title', $get->title);
         $this->assertEquals('new_body',$get->body);
-        $this->assertEquals($post->id, $get->author_id);
+        $this->assertEquals($post->id, $get->id);
     }
 
     /** @test */

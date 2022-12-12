@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -48,7 +49,7 @@ class PostController extends Controller
         $post = new Post;
         $post->title = $request->title;
         $post->body = $request->body;
-        $post->author_id = $request->author_id;
+        $post->author_id = Auth::user()->id;
         $post->save();
         return response()->json([
             'status'=>true,
@@ -89,7 +90,7 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $this->postValid();
-        Post::where('id',$id)->update(['title'=>$request->title, 'body'=>$request->body,'author_id'=>$request->author_id]);
+        Post::where('id',$id)->update(['title'=>$request->title, 'body'=>$request->body,'author_id'=>Auth::user()->id]);
         return response()->json([
             'success'=> 'Updated Successfully']);        
     }
@@ -103,16 +104,18 @@ class PostController extends Controller
 
     public function destroy($id)
     {
-        Post::where('id',$id)->delete();
-        return response()->json([
-                'success'=> 'Deleted Successfully']);
+        if(Auth::check()){
+            Post::where('id',$id)->delete();
+            return response()->json([
+                    'success'=> 'Deleted Successfully']);
+        }
+        
     }
 
     protected function postValid()
     {
         request()->validate([
             'title'=>'required|max:255',
-            'body'=>'required',
-            'author_id'=>'required']);
+            'body'=>'required']);
     }
 }
