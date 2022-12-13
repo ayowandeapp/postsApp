@@ -21,9 +21,11 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts=  Post::orderby('id', 'DESC')->get();
+        $posts=  Post::with('likes')->orderby('id', 'DESC')->get();
         $posts = json_decode(json_encode($posts));
-        return $posts;
+        return response()->json([
+            'data'=>$posts,
+            'status'=>true]);
         // return view('vueApp')->with(compact('posts'));
     }
 

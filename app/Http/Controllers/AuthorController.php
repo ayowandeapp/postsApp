@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Author;
+use App\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthorController extends Controller
 {
@@ -12,9 +16,41 @@ class AuthorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function login(Request $request)
     {
-        //
+        $request->validate([
+            'email'=>'email|required',
+            'password'=>'required']);
+        $user = User::where('email', $request->email)->first();
+ 
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }else{
+            Auth::attempt(['email'=>$request->email, 'password'=>$request->password]);
+        }
+        $token = $user->createToken('webToken')->plainTextToken;
+        return response()->json([
+            'token' => $token,
+            'name' => $user->name]);   
+    }
+
+    public function signup(Request $request)
+    {
+        $request->validate([
+            'name'=>'required|max:255',
+            'email'=>'email|required',
+            'password'=>'required']);
+        $user = User::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'password'=>bcrypt('password')]);
+
+        $token = $user->createToken('webToken')->plainTextToken;
+        return response()->json([
+            'token' => $token,
+            'name' => $user->name]);   
     }
 
     /**
@@ -22,9 +58,13 @@ class AuthorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function logout()
     {
-        //
+        Auth::user()->currentAccessToken()->delete();
+        //Auth::logout();
+        //return redirect('/user/login')->with('success','logout Successfully');
+        return response()->json([
+            'message'=>'logout Successfully']);
     }
 
     /**

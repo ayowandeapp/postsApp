@@ -14,12 +14,26 @@ class PostManagementTest extends TestCase
     use RefreshDatabase;
     
     /** @test */
-    public function homePagePost()
+    public function get_homepage()
     {
         $response = $this->get('/');
 
         $response->assertStatus(200);
         $response->assertOk();
+    }
+
+    /** @test */
+    public function get_all_post()
+    {
+        factory(Post::class)->create();
+        factory(Post::class)->create();
+        $response = $this->get('/posts');
+
+        $response->assertStatus(200);
+        $response->assertOk();
+        dd($response['data']); die;
+        $this->assertIsArray($response['data']);
+        $this->assertCount(2,$response['data']);
     }
 
     /** @test */
@@ -53,10 +67,10 @@ class PostManagementTest extends TestCase
     /** @test */
     public function titleRequiredPost()
     {
+        Sanctum::actingAs(factory(User::class)->create());
         $response = $this->post('/posts/store',[
             'title'=>'',
-            'body'=>'testBody',
-            'author_id'=>4]);
+            'body'=>'testBody']);
 
         $response->assertSessionHasErrors('title');
     }
@@ -64,10 +78,10 @@ class PostManagementTest extends TestCase
     /** @test */
     public function bodyRequiredPost()
     {
+        Sanctum::actingAs(factory(User::class)->create());
         $response = $this->post('/posts/store',[
             'title'=>'test',
-            'body'=>'',
-            'author_id'=>9]);
+            'body'=>'']);
 
         $response->assertSessionHasErrors('body');
     }
