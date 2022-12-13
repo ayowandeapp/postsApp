@@ -31,7 +31,7 @@ class PostManagementTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertOk();
-        dd($response['data']); die;
+        //dd($response['data']); die;
         $this->assertIsArray($response['data']);
         $this->assertCount(2,$response['data']);
     }

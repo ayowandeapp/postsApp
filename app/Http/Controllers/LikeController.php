@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Like;
 use App\Post;
+use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
@@ -23,10 +24,16 @@ class LikeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($post_id)
+    public function create($post_id,$user_id)
     {
-        Like::create([
-            'post_id'=>$post_id]);
+        $like = new Like;
+        $like->user_id = $user_id;
+        $like->post_id = $post_id;
+        $like->save();
+        // Like::create([
+        //     'user_id' => '1',
+        //     'post_id' => $post_id,
+        // ]);
     }
 
     /**
@@ -79,15 +86,16 @@ class LikeController extends Controller
             return response()->json([
                 'message'=>'posts does not exist']);
         }
-        $like = Like::where('post_id',$id);
+        $user_id = Auth::user()->id;
+        $like = Like::where(['post_id'=>$id, 'user_id'=>$user_id]); 
+        //or use the ip address of guest
         if ($like->count() == 0) {
-            $this->create($id);
+            $this->create($id,$user_id);
         }
         $like->update(['like'=>$request->like]);
         return response()->json([
             'message'=>'updated',
-            'data'=>$like->first()]);
-
+            'data'=>$like ->first()]);
     }
 
     /**
