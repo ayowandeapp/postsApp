@@ -15,5 +15,8 @@ class Post extends Model
     //     $this->attributes['author_id'] = Author::firstOrCreate(['name'=>$author])->id;
 
     // }
+    public function likes(){
+        return $this->hasMany('\App\Like', 'post_id');
+    }
 
 }
