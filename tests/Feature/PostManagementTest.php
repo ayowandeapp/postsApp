@@ -26,14 +26,16 @@ class PostManagementTest extends TestCase
     public function get_all_post()
     {
         factory(Post::class)->create();
-        factory(Post::class)->create();
         $response = $this->get('/posts');
+        //dd($response['data']); die;
 
         $response->assertStatus(200);
         $response->assertOk();
-        //dd($response['data']); die;
+        foreach ($response['data'] as $key => $value) {
+            $this->assertArrayHasKey('likes',$value);
+        }
         $this->assertIsArray($response['data']);
-        $this->assertCount(2,$response['data']);
+        $this->assertCount(1,$response['data']);
     }
 
     /** @test */
